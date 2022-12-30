@@ -4,9 +4,7 @@ import javax.swing.*;
 
 import dao.DAOClientesImpl;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -18,8 +16,9 @@ public class ClientesFormulario extends javax.swing.JFrame {
     private JTextField textFieldNombre;
     private JTextField textFieldApellido;
     private JTextField textFieldMascota;
-    private JTextField textFieldAlimento;
     private JTextField textFieldEdad;
+    private JTextField textFieldAlimento;
+
     private JTextField textFieldFecha;
     private JTextField textFieldEMail;
     private JTextField textFieldTelefono;
@@ -47,12 +46,12 @@ public class ClientesFormulario extends javax.swing.JFrame {
         setContentPane(table);
 
 
-       menuBar= new JMenuBar();
-       archivo= new JMenu();
+        menuBar= new JMenuBar();
+        archivo= new JMenu();
         salir = new JMenuItem( "Salir");
 
         menuBar.add(archivo);
-       archivo.add(salir);
+        archivo.add(salir);
 
         setJMenuBar(menuBar);
         //NOSE
@@ -74,7 +73,66 @@ public class ClientesFormulario extends javax.swing.JFrame {
         } );
 
 
-                                          }
+        radioButtonInsert.addActionListener(new ActionListener() {
+          @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Clientes clie = new Clientes(Integer.parseInt(textFieldId.getText()), textFieldNombre.getText(), textFieldApellido.getText(), textFieldMascota.getText(),
+                        (Integer.parseInt(textFieldEdad.getText())), textFieldAlimento.getText(), textFieldFecha.getText(), textFieldEMail.getText(), (Integer.parseInt(textFieldTelefono.getText())),
+                        textFieldUsuario.getText(), textFieldClave.getText());
+
+                if (dao.insert(clie)) {
+                    JOptionPane.showMessageDialog(null, "Se ha insertado con Exito");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al Insertar");
+                }
+                cargar();
+
+            }
+        });
+
+
+        radioButtonUpgrade.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Clientes clie = new Clientes(Integer.parseInt(textFieldId.getText()), textFieldNombre.getText(), textFieldApellido.getText(), textFieldMascota.getText(),
+                        (Integer.parseInt(textFieldEdad.getText())), textFieldAlimento.getText(), textFieldFecha.getText(), textFieldEMail.getText(), (Integer.parseInt(textFieldTelefono.getText())),
+                        textFieldUsuario.getText(), textFieldClave.getText());
+
+                if (dao.upDate(clie)) {
+                    JOptionPane.showMessageDialog(null, "Se ha modificado con Exitoso");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al Modificar");
+                }
+                cargar();
+            }
+
+        });
+
+
+        radioButtonDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Clientes clie = new Clientes(Integer.parseInt(textFieldId.getText()), textFieldNombre.getText(), textFieldApellido.getText(), textFieldMascota.getText(),
+                        (Integer.parseInt(textFieldEdad.getText())), textFieldAlimento.getText(), textFieldFecha.getText(), textFieldEMail.getText(), (Integer.parseInt(textFieldTelefono.getText())),
+                        textFieldUsuario.getText(), textFieldClave.getText());
+
+
+                if (dao.delete(clie)) {
+                    JOptionPane.showMessageDialog(null, "Se ha borrado con Exito");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al Borrar");
+                }
+                cargar();
+            }
+        });
+        tblData.addComponentListener(new ComponentAdapter() {
+
+
+
+        });
+    }
 
 
 
@@ -82,7 +140,7 @@ public class ClientesFormulario extends javax.swing.JFrame {
     }
 
 
-    //NOSE
+
 
 
             DefaultTableModel modelo = new DefaultTableModel(column,  0);
@@ -119,11 +177,8 @@ public class ClientesFormulario extends javax.swing.JFrame {
 
             }
 
-            //lo de ocverride no va segun este modelo de yv
+
             ArrayList<Object[]> data = new ArrayList<>();
-            // public formClientes() {
-            //   btnInsert.addMouseListener(new MouseAdapter() {
-            //     @Override
 
 
     private void createUIComponents () {
@@ -136,22 +191,8 @@ public class ClientesFormulario extends javax.swing.JFrame {
     private void initComponents() {
     }
 
-/*
-            private void setBtnInsertMouseClicked (MouseEvent e){
 
-                Clientes clie = new Clientes(Integer.parseInt(textFieldId.getText()), textFieldNombre.getText(), textFieldApellido.getText(), textFieldMascota.getText(),
-                        (Integer.parseInt(textFieldEdad.getText())), textFieldAlimento.getText(), textFieldFecha.getText(), textFieldEMail.getText(), (Integer.parseInt(textFieldTelefono.getText())),
-                        textFieldUsuario.getText(), textFieldClave.getText());
 
-                if (dao.insert(clie)) {
-                    JOptionPane.showMessageDialog(this, "Se ha insertado con Exito");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al Insertar");
-                }
-                cargar();
-
-            }
-*/
 
             private void tblDataMouseClicked (MouseEvent event){
                 this.textFieldId.setText(tblData.getValueAt(tblData.getSelectedRow(),  0).toString());
@@ -165,37 +206,6 @@ public class ClientesFormulario extends javax.swing.JFrame {
                 this.textFieldTelefono.setText(tblData.getValueAt(tblData.getSelectedRow(), 7).toString());
                 this.textFieldUsuario.setText(tblData.getValueAt(tblData.getSelectedRow(), 9).toString());
                 this.textFieldClave.setText(tblData.getValueAt(tblData.getSelectedRow(), 10).toString());
-            }
-
-            private void setBtnUpdateMouseClicked (MouseEvent e){
-
-                Clientes clie = new Clientes(Integer.parseInt(textFieldId.getText()), textFieldNombre.getText(), textFieldApellido.getText(), textFieldMascota.getText(),
-                        (Integer.parseInt(textFieldEdad.getText())), textFieldAlimento.getText(), textFieldFecha.getText(), textFieldEMail.getText(), (Integer.parseInt(textFieldTelefono.getText())),
-                        textFieldUsuario.getText(), textFieldClave.getText());
-
-                if (dao.upDate(clie)) {
-                    JOptionPane.showMessageDialog(this, "Se ha modificado con Exitoso");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al Modificar");
-                }
-                cargar();
-
-            }
-
-            private void setBtnDeleteMouseClicked (MouseEvent e){
-
-                Clientes clie = new Clientes(Integer.parseInt(textFieldId.getText()), textFieldNombre.getText(), textFieldApellido.getText(), textFieldMascota.getText(),
-                        (Integer.parseInt(textFieldEdad.getText())), textFieldAlimento.getText(), textFieldFecha.getText(), textFieldEMail.getText(), (Integer.parseInt(textFieldTelefono.getText())),
-                        textFieldUsuario.getText(), textFieldClave.getText());
-
-
-                if (dao.delete(clie)) {
-                    JOptionPane.showMessageDialog(this, "Se ha borrado con Exito");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al Borrar");
-                }
-                cargar();
-
             }
 
         }
